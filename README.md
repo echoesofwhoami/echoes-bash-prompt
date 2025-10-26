@@ -16,6 +16,7 @@ git clone https://github.com/echoesofwhoami/echoes-bash-prompt.git
 cd echoes-bash-prompt
 sh install.sh
 source ~/.bashrc
+cd ..
 rm -rf echoes-bash-prompt
 ```
 
