@@ -10,6 +10,14 @@ The git prompt will track the current directory's git branch status and display 
 
 ![Prompt image](assets/prompt.png "Prompt image")
 
+## Install
+```
+git clone git@github.com:echoesofwhoami/echoes-bash-prompt.git
+cd echoes-bash-prompt
+sh install.sh
+source ~/.bashrc
+```
+
 ## FAQ
 - Q: Can I install this manually?
 - A: It is the recommended way, only execute the install.sh script if you know what id does and you're ok with it.
