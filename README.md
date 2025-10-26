@@ -1,4 +1,4 @@
-🐚 Echoes Git/Bash Prompt Setup
+# 🐚 Echoes Git/Bash Prompt Setup
 
 This repo’s for the htb folks that ask for it.
 
@@ -7,6 +7,8 @@ Contains a install.sh script that can be executed without looking at it and it w
 It contains some useful aliases for htb machines like: connectvpn, stopvpn, htbip, addhost (to /etc/hosts) etc.
 
 The git prompt will track the current directory's git branch status and display some symbols like in this image:
+
+![Prompt image](assets/prompt.png "Prompt image")
 
 ## FAQ
 Q: Can I install this manually?
