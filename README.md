@@ -12,7 +12,7 @@ The git prompt will track the current directory's git branch status and display 
 
 ## Install
 ```bash
-git clone git@github.com:echoesofwhoami/echoes-bash-prompt.git
+git clone https://github.com/echoesofwhoami/echoes-bash-prompt.git
 cd echoes-bash-prompt
 sh install.sh
 source ~/.bashrc
