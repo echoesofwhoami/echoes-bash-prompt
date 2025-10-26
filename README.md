@@ -11,14 +11,14 @@ The git prompt will track the current directory's git branch status and display 
 ![Prompt image](assets/prompt.png "Prompt image")
 
 ## FAQ
-Q: Can I install this manually?
-A: It is the recommended way, only execute the install.sh script if you know what id does and you're ok with it.
+- Q: Can I install this manually?
+- A: It is the recommended way, only execute the install.sh script if you know what id does and you're ok with it.
 
-Q: I installed this with install.sh and lost my aliases how do I recover them
-A: Git gut
+- Q: I installed this with install.sh and lost my aliases how do I recover them
+- A: Git gut
 
-Q: Where do I find your bash prompt config?
-A: Yes
+- Q: Where do I find your bash prompt config?
+- A: Yes
 
 ## Credits
 Thanks to myself for making this and adding a fork of the git-prompt.
