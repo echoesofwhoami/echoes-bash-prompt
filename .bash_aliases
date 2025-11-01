@@ -13,7 +13,7 @@ connvpn() {
         echo "Usage: connvpn <config_file.ovpn>"
         return 1
     fi
-    sudo nohup openvpn --config "$1" > /dev/null 2>&1 &
+    sudo nohup openvpn --config "$1" </dev/null >/dev/null 2>&1 &
 
     htbip
 }
