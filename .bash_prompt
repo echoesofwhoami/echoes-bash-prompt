@@ -76,6 +76,10 @@ set_prompt() {
     PS1+="$(font ${fg} ${layout})]$(font)"
     PS1+="$(font ${fg} ${layout})──[$(font)"
     PS1+="$(font ${fg} ${content})${user}@$(font ${fg} ${content})${host}$(font)"
+    if [[ -n $(htbip) ]]; then
+        PS1+="$(font ${fg} ${layout})]──[$(font)"
+        PS1+="$(font ${fg} ${content})$(htbip)$(font)"
+    fi
     PS1+="$(font ${fg} ${layout})]──[$(font)"
     PS1+="$(font ${fg} ${content})${pwd}$(font)"
     PS1+="$(font ${fg} ${layout})]$(font)"

@@ -2,6 +2,10 @@ alias l='ls -lah'
 alias ll='ls -lah'
 alias py='python3'
 
+htbip() {
+    ip a | grep -oP '10\.10\.\d+\.\d+' | head -n1
+}
+
 connvpn() {
     sudo -l >/dev/null
 
@@ -10,10 +14,14 @@ connvpn() {
         return 1
     fi
     sudo nohup openvpn --config "$1" > /dev/null 2>&1 &
+
+    htbip
 }
 
 stopvpn() {
     sudo killall openvpn
+
+    htbip > /dev/null
 }
 
 start_kali() {
@@ -80,10 +88,6 @@ batdiff() {
 
 notify() {
     nohup bash -c 'timeSent=$(date +"%H:%M");sleep "$(($1*60))"; notify-send -a "$timeSent - $(date +"%H:%M")" -u critical " $2"' dummy "$1" "$2" >/dev/null 2>&1 & disown
-}
-
-htbip() {
-    ip a | grep -oP '10\.10\.\d+\.\d+' | head -n1
 }
 
 addhost() {
