@@ -6,6 +6,8 @@ Contains a install.sh script that can be executed without looking at it and it w
 
 It contains some useful aliases for htb machines like: connectvpn, stopvpn, htbip, addhost (to /etc/hosts) etc.
 
+Now it also shows the vpn ip when connected to a htb vpn
+
 The git prompt will track the current directory's git branch status and display some symbols like in this image:
 
 ![Prompt image](assets/prompt.png "Prompt image")
