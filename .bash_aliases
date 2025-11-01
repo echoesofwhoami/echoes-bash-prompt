@@ -24,36 +24,6 @@ stopvpn() {
     htbip > /dev/null
 }
 
-start_kali() {
-    if [ -z "$(docker ps -qf "ancestor=my_kali_image")" ]; then
-        docker run -d --privileged \
-        -v $(pwd)/shared_volume:/home/$USER/shared_volume \
-        --user $(id -u):$(id -g) \
-        --name my_kali_container \
-        my_kali_image tail -f /dev/null >/dev/null
-    fi
-    echo "[+] Kali container started"
-}
-
-kali_user() {
-    [ -z "$(docker ps -qf "ancestor=my_kali_image")" ] && start_kali >/dev/null
-    docker exec -it $(docker ps -qf "ancestor=my_kali_image") /bin/bash
-}
-
-kali_root() {
-    [ -z "$(docker ps -qf "ancestor=my_kali_image")" ] && start_kali >/dev/null
-    docker exec -u 0 -it $(docker ps -qf "ancestor=my_kali_image") /bin/bash
-}
-
-stop_kali() {
-    if [ "$(docker ps -qf "ancestor=my_kali_image")" ]; then
-        docker kill $(docker ps -qf "ancestor=my_kali_image") >/dev/null
-        docker rm -f my_kali_container >/dev/null
-    fi
-    echo "[+] Kali container stopped"
-}
-
-
 newmachine() {
     local dirname=${1:-ctf_env}
 
