@@ -83,9 +83,12 @@ restorehosts() {
     cat /etc/hosts
 }
 
+targetip() {
+    cat ~/.targetip
+}
+
 settargetip() {
     echo "$1" > ~/.targetip
-    export targetip="$1"
 }
 
 validate_sha256() {

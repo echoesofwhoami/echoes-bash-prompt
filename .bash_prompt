@@ -67,24 +67,51 @@ set_prompt() {
     local layout=$white
     local content=$red
     local gitcolor=$white
+
     if [[ ${git_info} ]]; then
         git_info="$(font ${fg} ${gitcolor})${git_info}$(font)"
     fi
     
-    PS1="$(font ${fg} ${layout})┌─[$(font)"
-    PS1+="$(font ${fg} ${content})${date} ${time} ${uptime}$(font)"
-    PS1+="$(font ${fg} ${layout})]$(font)"
-    PS1+="$(font ${fg} ${layout})──[$(font)"
-    PS1+="$(font ${fg} ${content})${user}@$(font ${fg} ${content})${host}$(font)"
+    initial_box_with() {
+        local text="$*"
+        PS1="$(font ${fg} ${layout})┌─[$(font)"
+        PS1+="$(font ${fg} ${content})${text}$(font)"
+        PS1+="$(font ${fg} ${layout})]$(font)"
+    }
+
+    new_box_with() {
+        local text="$*"
+        PS1+="$(font ${fg} ${layout})──[$(font)"
+        PS1+="$(font ${fg} ${content})${text}$(font)"
+        PS1+="$(font ${fg} ${layout})]$(font)"
+    }
+
+    set_git_info() {
+        PS1+="$(font)${git_info}$(font)"
+    }
+
+    end_prompt() {
+        PS1+="\n$(font ${fg} ${layout})└─▶$(font) "
+    }
+
+    initial_box_with "${user}@${host}"
+
     if [[ -n $(htbip) ]]; then
-        PS1+="$(font ${fg} ${layout})]──[$(font)"
-        PS1+="$(font ${fg} ${content})$(htbip)$(font)"
+            new_box_with "htbip $(htbip)"
+        if [[ -s $(targetip) ]]; then
+            new_box_with "targetip not set"
+        else
+            new_box_with "targetip $(targetip)"
+        fi
     fi
-    PS1+="$(font ${fg} ${layout})]──[$(font)"
-    PS1+="$(font ${fg} ${content})${pwd}$(font)"
-    PS1+="$(font ${fg} ${layout})]$(font)"
-    PS1+="$(font)${git_info}$(font)"
-    PS1+="\n$(font ${fg} ${layout})└─▶$(font) "
+
+    new_box_with "${pwd}"
+
+    # set_venv_info
+
+    set_git_info
+
+    end_prompt
 }
 
 GIT_PS1_SHOWUPSTREAM="auto"     # '<' behind, '>' ahead, '<>' diverged, '=' no difference
