@@ -1,6 +1,7 @@
 alias l='ls -lah'
 alias ll='ls -lah'
 alias py='python3'
+alias vi='vim'
 
 htbip() {
     ip a | grep -oP '10\.10\.\d+\.\d+' | head -n1
@@ -27,29 +28,23 @@ stopvpn() {
 newmachine() {
     local dirname=${1:-ctf_env}
 
-    mkdir -p "$dirname"/{source_code,burp_requests,tmp,shared_volume}
-    
-    mkdir -p "$dirname"/shared_volume/{data,scripts}
+    mkdir -p "$dirname"/{source_code,data,scripts}
 
-    touch "$dirname"/{ideas,credentials}
+    touch "$dirname"/{tmp,credentials}
+
+    touch "$(pwd)/$dirname/scripts/exploit.py"
 
     echo "[*] Environment created at $(pwd)/$dirname"
 
-    cd "$(pwd)/$dirname/shared_volume/scripts"
+    python -m venv "$(pwd)/$dirname/scripts/venv"
 
-    touch exploit.py
-
-    python -m venv venv
-
-    source venv/bin/activate
-
-    echo "[*] Python environment created at $(pwd)"
-
-    cd ../../
-
-    echo "[*] Restoring hosts"
+    echo "[*] Python environment created at $(pwd)/$dirname/scripts"
+    
+    source "$(pwd)/$dirname/scripts/venv/bin/activate"
 
     restorehosts
+
+    echo "[*] Restored hosts"
 }
 
 batdiff() {
