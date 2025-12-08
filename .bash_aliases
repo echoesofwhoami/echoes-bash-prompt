@@ -3,6 +3,16 @@ alias ll='ls -lah'
 alias py='python3'
 alias vi='vim'
 
+vpnfilemv() {
+    mkdir -p ~/vpn
+    mv ~/Downloads/*.ovpn ~/vpn/ 2>/dev/null || echo "No .ovpn files found in ~/Downloads"
+    echo "Moved .ovpn files to ~/vpn"
+}
+
+vpns() {
+    l ~/vpn
+}
+
 htbip() {
     ip a | grep -oP '10\.10\.\d+\.\d+' | head -n1
 }
@@ -10,11 +20,45 @@ htbip() {
 connvpn() {
     sudo -l >/dev/null
 
-    if [ -z "$1" ]; then
-        echo "Usage: connvpn <config_file.ovpn>"
+    local vpn_dir="$HOME/vpn"
+    local vpn_files=("$vpn_dir"/*.ovpn)
+    
+    if [ ! -d "$vpn_dir" ] || [ ${#vpn_files[@]} -eq 0 ] || [ ! -f "${vpn_files[0]}" ]; then
+        echo "No .ovpn files found in ~/vpn"
+        echo "Usage: connvpn <config_file.ovpn> (optional)"
         return 1
     fi
-    sudo nohup openvpn --config "$1" </dev/null >/dev/null 2>&1 &
+
+    if [ -z "$1" ]; then
+        echo "Available VPN files:"
+        local i=1
+        for file in "${vpn_files[@]}"; do
+            if [ -f "$file" ]; then
+                echo "  $i) $(basename "$file")"
+                ((i++))
+            fi
+        done
+        
+        echo -n "Select VPN file (1-$((i-1))): "
+        read -r choice
+        
+        if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt $((i-1)) ]; then
+            echo "Invalid selection"
+            return 1
+        fi
+        
+        selected_file="${vpn_files[$((choice-1))]}"
+    else
+        selected_file="$1"
+    fi
+    
+    if [ ! -f "$selected_file" ]; then
+        echo "VPN file not found: $selected_file"
+        return 1
+    fi
+
+    echo "Connecting to $(basename "$selected_file")..."
+    sudo nohup openvpn --config "$selected_file" </dev/null >/dev/null 2>&1 &
 
     htbip
 }
