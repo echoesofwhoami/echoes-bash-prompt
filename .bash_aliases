@@ -158,3 +158,11 @@ validate_sha256() {
     fi
 }
 
+tofile() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: tofile <filename>"
+        return 1
+    fi
+    
+    cat > "$1"
+}
