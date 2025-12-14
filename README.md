@@ -64,6 +64,9 @@ git clone https://github.com/echoesofwhoami/echoes-bash-prompt.git && cd echoes-
 - Q: How do I update it?
 - A: Simply re-run the install script to get the latest version.
 
+- Q: I want to remove it, how do I do it?
+- A: rm -rf $HOME/.config/echoes then restart the terminal
+
 ## Credits
 Thanks to myself for making this and adding a fork of the git-prompt.
 If you like it smash the respect button here https://app.hackthebox.com/users/2423666
