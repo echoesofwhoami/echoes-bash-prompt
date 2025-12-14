@@ -1,4 +1,8 @@
-source $HOME/.bash_prompt
-source $HOME/.git-prompt
+source $HOME/.config/echoes/.echoes_bash_prompt
+source $HOME/.config/echoes/.git-prompt
 LS_COLORS=$LS_COLORS:'di=38;5;160:'; export LS_COLORS
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+[ -f ~/.config/echoes/.echoes_aliases ] && . ~/.config/echoes/.echoes_aliases
