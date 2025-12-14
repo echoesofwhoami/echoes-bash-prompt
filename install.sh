@@ -1,24 +1,17 @@
 #!/bin/bash
 
-add_to_bashrc() {
-  local new_content="$1"
-  local file_path="$HOME/.bashrc"
-  if ! grep -qF "$new_content" "$file_path"; then
-    echo -e "$new_content" >> "$file_path"
-  fi
-}
-
 echo 'Setting up .bashrc'
+source_command='[ -f ~/.config/echoes/.echoesrc ] && . ~/.config/echoes/.echoesrc'
+if ! grep -qF "$source_command" "$HOME/.bashrc"; then
+  echo "$source_command" >> "$HOME/.bashrc"
+fi
 
-add_to_bashrc "source $HOME/.bash_prompt \n"
-add_to_bashrc "source $HOME/.git-prompt \n"
-add_to_bashrc "LS_COLORS=\$LS_COLORS:'di=38;5;160:'; export LS_COLORS \n"
-add_to_bashrc "[ -f ~/.bash_aliases ] && . ~/.bash_aliases \n"
+echo 'Copying config files'
 
-echo 'Copying bash config files'
+mkdir -p "$HOME/.config/echoes"
+cp .echoes_bash_prompt "$HOME/.config/echoes/.echoes_bash_prompt"
+cp .git-prompt "$HOME/.config/echoes/.git-prompt"
+cp .echoes_aliases "$HOME/.config/echoes/.echoes_aliases"
+cp .echoesrc "$HOME/.config/echoes/.echoesrc"
 
-cp .bash_prompt $HOME/.bash_prompt
-cp .git-prompt $HOME/.git-prompt
-cp .bash_aliases $HOME/.bash_aliases
-
-echo 'Exec source ~/.bashrc or reload the configs somehow'
+echo 'Exec source ~/.bashrc or restart the terminal to see the changes'

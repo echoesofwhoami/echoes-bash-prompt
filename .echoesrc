@@ -1,0 +1,4 @@
+source $HOME/.bash_prompt
+source $HOME/.git-prompt
+LS_COLORS=$LS_COLORS:'di=38;5;160:'; export LS_COLORS
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
