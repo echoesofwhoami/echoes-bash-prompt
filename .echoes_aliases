@@ -89,6 +89,10 @@ newmachine() {
     restorehosts
 
     echo "[*] Restored hosts"
+
+    cd "$dirname"
+
+    echo "[*] Changed to directory: $(pwd)"
 }
 
 batdiff() {
