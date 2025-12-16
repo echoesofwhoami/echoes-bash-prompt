@@ -3,6 +3,16 @@ alias ll='ls -lah'
 alias py='python3'
 alias vi='vim'
 
+if [ -f "$HOME/.targetip" ]; then
+    export targetip="$(cat "$HOME/.targetip")"
+fi
+
+targetip() {
+    if [ -f "$HOME/.targetip" ]; then
+        cat "$HOME/.targetip"
+    fi
+}
+
 vpnfilemv() {
     mkdir -p ~/vpn
     mv ~/Downloads/*.ovpn ~/vpn/ 2>/dev/null || echo "No .ovpn files found in ~/Downloads"
@@ -126,12 +136,9 @@ restorehosts() {
     cat /etc/hosts
 }
 
-targetip() {
-    cat ~/.targetip
-}
-
 settargetip() {
     echo "$1" > ~/.targetip
+    export targetip="$1"
 }
 
 validate_sha256() {

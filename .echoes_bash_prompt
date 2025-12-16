@@ -98,10 +98,10 @@ set_prompt() {
 
     if [[ -n $(htbip) ]]; then
             new_box_with "htbip $(htbip)"
-        if [[ -s $(targetip) ]]; then
-            new_box_with "targetip not set"
-        else
+        if [[ -s "$HOME/.targetip" ]]; then
             new_box_with "targetip $(targetip)"
+        else
+            new_box_with "<targetip not set>"
         fi
     fi
 
