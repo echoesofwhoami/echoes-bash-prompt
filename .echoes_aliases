@@ -141,6 +141,28 @@ settargetip() {
     export targetip="$1"
 }
 
+hashcrack() {
+    local hash_file="$1"
+    if [[ -z "$hash_file" ]]; then
+        echo "Usage: hashcrack <hash_file>"
+        return 1
+    fi
+    
+    local hash_mode=$(hashcat "$hash_file" --identify | grep -oP '^\s*\K\d+(?=\s*\|)')
+    
+    if [[ -z "$hash_mode" ]]; then
+        echo "Could not identify hash type for $hash_file"
+        return 1
+    fi
+    
+    echo "Identified hash mode: $hash_mode"
+
+    echo "Running: hashcat -m $hash_mode $hash_file /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt --force"
+    
+    hashcat -m "$hash_mode" "$hash_file" /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt --force
+}
+
+
 validate_sha256() {
     local expected="$1"
     local file="$2"
