@@ -2,6 +2,7 @@ alias l='ls -lah'
 alias ll='tree -a -L2'
 alias py='python3'
 alias vi='vim'
+alias hosts='cat /etc/hosts'
 
 if [ -f "$HOME/.targetip" ]; then
     export targetip="$(cat "$HOME/.targetip")"
