@@ -103,6 +103,12 @@ newmachine() {
     cd "$dirname"
 
     echo "[*] Changed to directory: $(pwd)"
+
+    rm ~/.targetip;
+    
+    touch ~/.targetip
+    
+    echo "[*] Clean targetip"
 }
 
 batdiff() {
