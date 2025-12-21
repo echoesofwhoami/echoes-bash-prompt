@@ -5,4 +5,16 @@ LS_COLORS=$LS_COLORS:'di=38;5;160:'; export LS_COLORS
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
+# Persistent shared history across all bash sessions
+export HISTFILE=~/.bash_history
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:erasedups
+export HISTTIMEFORMAT='%F %T '
+# Append to history file immediately
+shopt -s histappend
+PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+alias hsync='history -a; history -c; history -r; builtin history'
+
 [ -f ~/.config/echoes/.echoes_aliases ] && . ~/.config/echoes/.echoes_aliases
