@@ -1,5 +1,5 @@
 alias l='ls -lah'
-alias ll='ls -lah'
+alias ll='tree -a -L2'
 alias py='python3'
 alias vi='vim'
 
