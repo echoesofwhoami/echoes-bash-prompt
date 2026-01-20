@@ -32,6 +32,14 @@ echoeshelp() {
 ║   addhost      [ip] <domain> - add to /etc/hosts             ║
 ║   restorehosts reset /etc/hosts                              ║
 ╠══════════════════════════════════════════════════════════════╣
+║ PAYLOADS                                                     ║
+║   payloads     --type <TYPE> [OPTIONS]                       ║
+║     Types: xss, sqli, rce, lfi, xxe, ssti                    ║
+║     --tag      payload variant                               ║
+║     --port     port number                                   ║
+║     --listen   auto-start nc listener                        ║
+║     --help     show detailed payload help                    ║
+╠══════════════════════════════════════════════════════════════╣
 ║ UTILITIES                                                    ║
 ║   newmachine   [name] - setup CTF environment                ║
 ║   hashcrack    <file> - crack hash with rockyou              ║
