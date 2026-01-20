@@ -8,10 +8,11 @@ fi
 
 echo 'Copying config files'
 
-mkdir -p "$HOME/.config/echoes"
+mkdir -p "$HOME/.config/echoes/modules"
 cp .echoes_bash_prompt "$HOME/.config/echoes/.echoes_bash_prompt"
 cp .git-prompt "$HOME/.config/echoes/.git-prompt"
 cp .echoes_aliases "$HOME/.config/echoes/.echoes_aliases"
 cp .echoesrc "$HOME/.config/echoes/.echoesrc"
+cp modules/*.sh "$HOME/.config/echoes/modules/"
 
 echo 'Exec source ~/.bashrc or restart the terminal to see the changes'
