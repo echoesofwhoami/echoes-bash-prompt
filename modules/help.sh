@@ -40,6 +40,9 @@ echoeshelp() {
 ║     --listen   auto-start nc listener                        ║
 ║     --help     show detailed payload help                    ║
 ╠══════════════════════════════════════════════════════════════╣
+║ TIME MANAGEMENT                                              ║
+║   settime      <datetime|restore> - set time or restore NTP  ║
+╠══════════════════════════════════════════════════════════════╣
 ║ UTILITIES                                                    ║
 ║   newmachine   [name] - setup CTF environment                ║
 ║   hashcrack    <file> - crack hash with rockyou              ║
