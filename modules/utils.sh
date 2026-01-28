@@ -20,6 +20,8 @@ tofile() {
 
 newmachine() {
     local dir="${1:-ctf_env}"
+    local target_ip="$2"
+    local add_to_hosts="$3"
     mkdir -p "$dir"/{source_code,data,scripts}
     touch "$dir"/{tmp,credentials,scripts/exploit.py}
 
@@ -31,6 +33,24 @@ newmachine() {
     restorehosts
     cd "$dir" || return
     rm -f ~/.targetip; touch ~/.targetip
+    
+    # Set target IP if provided, otherwise preserve existing one
+    if [[ -n "$target_ip" ]]; then
+        echo "$target_ip" > ~/.targetip
+        export targetip="$target_ip"
+        echo "[*] Target IP set to: $target_ip"
+    elif [[ -f "$HOME/.targetip" && -s "$HOME/.targetip" ]]; then
+        export targetip="$(cat "$HOME/.targetip")"
+        echo "[*] Preserved existing target IP: $targetip"
+    fi
+    
+    # Add to hosts if addhost parameter is provided
+    if [[ "$add_to_hosts" == "addhost" && -n "$targetip" ]]; then
+        echo "[*] Adding target IP to hosts file..."
+        echo "$targetip $dir.htb" | sudo tee -a /etc/hosts >/dev/null
+        echo "[*] Added $targetip to /etc/hosts"
+    fi
+    
     echo "[*] Ready"
 }
 
