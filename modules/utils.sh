@@ -27,7 +27,7 @@ newmachine() {
 
     echo "[*] Created: $(pwd)/$dir"
 
-    python -m venv "$dir/scripts/venv" && source "$dir/scripts/venv/bin/activate"
+    python -m venv "$dir/scripts/.venv" && source "$dir/scripts/.venv/bin/activate"
     echo "[*] Python venv activated"
 
     restorehosts
