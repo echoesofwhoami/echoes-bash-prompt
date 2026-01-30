@@ -22,8 +22,8 @@ newmachine() {
     local dir="${1:-ctf_env}"
     local target_ip="$2"
     local add_to_hosts="$3"
-    mkdir -p "$dir"/{source_code,data,scripts}
-    touch "$dir"/{tmp,credentials,scripts/exploit.py}
+    mkdir -p "$dir"/{recon,scripts}
+    touch "$dir"/{tmp,recon/credentials,scripts/exploit.py}
 
     echo "[*] Created: $(pwd)/$dir"
 
