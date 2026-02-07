@@ -12,7 +12,12 @@ echoeshelp() {
 ║   vi           vim                                           ║
 ║   hosts        cat /etc/hosts                                ║
 ╠══════════════════════════════════════════════════════════════╣
-║ NETCAT LISTENERS                                             ║
+║ NCAT CONTROLLER (non-interactive reverse-shell handler)      ║
+║   nclisten     <port> - start detached ncat listener         ║
+║   nccmd        "<cmd>" - send command, print output          ║
+║   ncctrlstop   stop listener and clean session               ║
+╠══════════════════════════════════════════════════════════════╣
+║ NETCAT LOGGERS (detached netcat loggers)                     ║
 ║   ncstart      <port> [proto] [name] - start listener        ║
 ║   nclist       list active listeners                         ║
 ║   ncstop       <name|pid|port> - stop listener               ║
