@@ -1,6 +1,4 @@
-# 🐚 Echoes Git/Bash Prompt Setup 🐚
-
-This repo’s for the htb folks that ask for it.
+# Echoes Git/Bash Prompt
 
 Contains a install.sh script that can be executed to install everything needed.
 
@@ -8,47 +6,73 @@ It contains some useful aliases for htb machines like: connectvpn, stopvpn, htbi
 
 Now it also shows the vpn ip when connected to a htb vpn.
 
-## Usage Workflow
-
-Typical workflow:
-
-1. **Download VPN config file** from HTB
-2. **Move and connect** using aliases:
-   ```bash
-   vpnfilemv    # Moves VPN config to the right location
-   connvpn      # Connects to the VPN
-   ```
-3. **Set target and enumerate**:
-   ```bash
-   settargetip 10.x.x.x                    # Set the target IP
-   nmap -sC -sV $(targetip)                # Scan with the target IP
-   addhost $(targetip) whatever.htb        # Add to /etc/hosts
-   ```
-
 The aliases handle everything else automatically - no need to manually manage VPN files or remember IP addresses.
 
-## Additional Commands
+## Commands
 
-- **tofile**: Emulates `cat <<'EOF'>` but instead of writing EOF at the end, just press `Ctrl-D` to send the file contents (use `Ctrl-C` to cancel)
-- **settargetip**: Sets a target IP that can be referenced with `$(targetip)`
-  ```bash
-  nmap -sC -sV $(targetip)
-  ```
-- **addhost**: Adds entries to `/etc/hosts` for easy name resolution
-  ```bash
-  addhost <IP> <hostname>
-  ```
-
-**More commands available!** Check the aliases file for the complete list of useful commands and shortcuts.
-
-
+```bash
+╔══════════════════════════════════════════════════════════════╗
+║                     ECHOES SHELL TOOLS                       ║
+╠══════════════════════════════════════════════════════════════╣
+║ ALIASES                                                      ║
+║   l            ls -lah                                       ║
+║   ll           tree -a -L2                                   ║
+║   py           python3                                       ║
+║   vi           vim                                           ║
+║   hosts        cat /etc/hosts                                ║
+╠══════════════════════════════════════════════════════════════╣
+║ NCAT CONTROLLER (non-interactive reverse-shell handler)      ║
+║   nclisten     <port> - start detached ncat listener         ║
+║   nccmd        "<cmd>" - send command, print output          ║
+║   ncctrlstop   stop listener and clean session               ║
+╠══════════════════════════════════════════════════════════════╣
+║ NETCAT LOGGERS (detached netcat loggers)                     ║
+║   ncstart      <port> [proto] [name] - start listener        ║
+║   nclist       list active listeners                         ║
+║   ncstop       <name|pid|port> - stop listener               ║
+║   nclog        <name|pid|port> [lines] - view log            ║
+║   ncstopall    stop all listeners                            ║
+╠══════════════════════════════════════════════════════════════╣
+║ VPN                                                          ║
+║   connvpn      [file] - connect to VPN                       ║
+║   stopvpn      stop VPN connection                           ║
+║   vpns         list VPN files                                ║
+║   vpnfilemv    move .ovpn from Downloads to ~/vpn            ║
+║   htbip        show HTB IP                                   ║
+╠══════════════════════════════════════════════════════════════╣
+║ HOSTS & TARGET                                               ║
+║   settargetip  <ip> - set target IP                          ║
+║   targetip     show target IP                                ║
+║   addhost      [ip] <domain> - add to /etc/hosts             ║
+║   restorehosts reset /etc/hosts                              ║
+╠══════════════════════════════════════════════════════════════╣
+║ PAYLOADS                                                     ║
+║   payloads     --type <TYPE> [OPTIONS]                       ║
+║     Types: xss, sqli, rce, lfi, xxe, ssti                    ║
+║     --tag      payload variant                               ║
+║     --port     port number                                   ║
+║     --listen   auto-start nc listener                        ║
+║     --help     show detailed payload help                    ║
+╠══════════════════════════════════════════════════════════════╣
+║ TIME MANAGEMENT                                              ║
+║   settime      <datetime|restore> - set time or restore NTP  ║
+╠══════════════════════════════════════════════════════════════╣
+║ UTILITIES                                                    ║
+║   newmachine   [name] - setup CTF environment                ║
+║   hashcrack    <file> - crack hash with rockyou              ║
+║   validate_sha256 <expected> <file>                          ║
+║   batdiff      [ref] - git diff with bat                     ║
+║   notify       <min> <msg> - timed notification              ║
+║   tofile       <file> - stdin to file                        ║
+╚══════════════════════════════════════════════════════════════╝
+```
 The git prompt will track the current directory's git branch status and display some symbols like in this image:
 
 ![Prompt image](assets/prompt.png "Prompt image")
 
-## Install
+## Install/update
 
-One-line copy-paste installer:
+One-line copy-paste installer/updater:
 
 ```bash
 git clone https://github.com/echoesofwhoami/echoes-bash-prompt.git && cd echoes-bash-prompt && sh install.sh && source ~/.bashrc && cd .. && rm -rf echoes-bash-prompt
