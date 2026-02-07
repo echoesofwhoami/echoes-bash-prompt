@@ -6,6 +6,7 @@ echoeshelp() {
 ║                     ECHOES SHELL TOOLS                       ║
 ╠══════════════════════════════════════════════════════════════╣
 ║ ALIASES                                                      ║
+║   echoeshelp   show this help menu                           ║
 ║   l            ls -lah                                       ║
 ║   ll           tree -a -L2                                   ║
 ║   py           python3                                       ║
