@@ -10,7 +10,7 @@ The aliases handle everything else automatically - no need to manually manage VP
 
 ## Commands
 
-```bash
+```
 ╔══════════════════════════════════════════════════════════════╗
 ║                     ECHOES SHELL TOOLS                       ║
 ╠══════════════════════════════════════════════════════════════╣
