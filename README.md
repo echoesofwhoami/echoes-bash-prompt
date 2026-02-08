@@ -55,6 +55,10 @@ The aliases handle everything else automatically - no need to manually manage VP
 ║     --listen   auto-start nc listener                        ║
 ║     --help     show detailed payload help                    ║
 ╠══════════════════════════════════════════════════════════════╣
+║ WEB                                                          ║
+║   fuzz         <target> [-c cookies] - feroxbuster dir fuzz  ║
+║   subfuzz      <domain> [-w wordlist] - subdomain discovery  ║
+╠══════════════════════════════════════════════════════════════╣
 ║ TIME MANAGEMENT                                              ║
 ║   settime      <datetime|restore> - set time or restore NTP  ║
 ╠══════════════════════════════════════════════════════════════╣
