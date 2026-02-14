@@ -73,7 +73,7 @@ nccmd() {
 
     local new=$(wc -c < "$NCAT_CTRL_OUT" 2>/dev/null || echo 0)
     [[ $new -gt $off ]] && {
-        tail -c +$((off + 1)) "$NCAT_CTRL_OUT" | sed -n "2,$ { /.*[$#>][[:space:]]*$/ { q }; p }"
+        tail -c +$((off + 1)) "$NCAT_CTRL_OUT" | sed -n "1,$ { /.*[$#>][[:space:]]*$/ { q }; p }"
     }
     echo "$new" > "$NCAT_CTRL_OFF"
     echo ""
