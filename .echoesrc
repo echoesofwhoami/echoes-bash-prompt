@@ -1,6 +1,6 @@
 source $HOME/.config/echoes/.echoes_bash_prompt
 source $HOME/.config/echoes/.git-prompt
-LS_COLORS=$LS_COLORS:'di=38;5;160:'; export LS_COLORS
+LS_COLORS=$LS_COLORS:'di=38;5;160:ex=1;31:'; export LS_COLORS
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
