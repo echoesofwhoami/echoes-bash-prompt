@@ -5,9 +5,3 @@ alias ll='tree -a -L2'
 alias py='python3'
 alias vi='vim'
 alias hosts='cat /etc/hosts'
-
-ECHOES_MODULES_DIR="${ECHOES_MODULES_DIR:-$HOME/.config/echoes/modules}"
-
-for mod in "$ECHOES_MODULES_DIR"/*.sh; do
-    [[ -f "$mod" ]] && source "$mod"
-done

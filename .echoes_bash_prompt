@@ -27,12 +27,21 @@ set_prompt() {
     local fg="38"
 
     # Colours
+    local light_blue="38"
+    local lighter_blue="74"
+    local purple="140"
+    local pink="175"
+    local deep_blue="31"
+    local mint_green="72"
+    local lavender="147"
+    local peach="216"
+
     local black="16"
     local blue="27"
     local cyan="51"
     local green="46"
     local orange="202"
-    local purple="201"
+    local hard_purple="201"
     local red="196"
     local white="15"
     local yellow="11"
@@ -64,8 +73,11 @@ set_prompt() {
 
     local git_info=$(__git_ps1)
     
+
+    LS_COLORS=$LS_COLORS:"di=38;5;${ECHOES_CONTENT_COLOR}:ex=1;38;5;${ECHOES_CONTENT_COLOR}:"; export LS_COLORS
+
     local layout=$white
-    local content=$red
+    local content="${ECHOES_CONTENT_COLOR:-$red}"
     local gitcolor=$white
 
     if [[ ${git_info} ]]; then
@@ -95,15 +107,6 @@ set_prompt() {
     }
 
     initial_box_with "${user}@${host}"
-
-    if [[ -n $(htbip) ]]; then
-            new_box_with "htbip $(htbip)"
-        if [[ -s "$HOME/.targetip" ]]; then
-            new_box_with "targetip $(targetip)"
-        else
-            new_box_with "<targetip not set>"
-        fi
-    fi
 
     new_box_with "${pwd}"
 
