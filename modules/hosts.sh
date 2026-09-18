@@ -1,9 +1,19 @@
 #!/bin/bash
 
 [[ -f "$HOME/.targetip" ]] && export targetip="$(cat "$HOME/.targetip")"
+[[ -f "$HOME/.hidetargetip" ]] && export hidetargetip=1
 
 targetip()    { [[ -f "$HOME/.targetip" ]] && cat "$HOME/.targetip"; }
 settargetip() { echo "$1" > ~/.targetip; export targetip="$1"; }
+toggletargetip() {
+    if [[ -n "$hidetargetip" ]]; then
+        unset hidetargetip
+        rm -f "$HOME/.hidetargetip"
+    else
+        export hidetargetip=1
+        touch "$HOME/.hidetargetip"
+    fi
+}
 
 addhost() {
     local ip domain

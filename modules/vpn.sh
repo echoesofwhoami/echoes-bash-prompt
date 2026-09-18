@@ -9,7 +9,7 @@ vpnfilemv() {
 
 vpns() { ls -lah "$VPN_DIR"; }
 
-htbip() { ip a | grep -oP '10\.10\.\d+\.\d+' | head -n1; }
+vpnip() { ip a | grep -oP '10\.\d+\.\d+\.\d+' | head -n1; }
 
 connvpn() {
     sudo -l >/dev/null
@@ -31,7 +31,7 @@ connvpn() {
     [[ ! -f "$selected" ]] && { echo "Not found: $selected"; return 1; }
     echo "Connecting to $(basename "$selected")..."
     sudo nohup openvpn --config "$selected" </dev/null >/dev/null 2>&1 &
-    htbip
+    vpnip
 }
 
 stopvpn() { sudo killall openvpn 2>/dev/null; }

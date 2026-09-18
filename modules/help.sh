@@ -30,10 +30,11 @@ echoeshelp() {
 ║   stopvpn      stop VPN connection                           ║
 ║   vpns         list VPN files                                ║
 ║   vpnfilemv    move .ovpn from Downloads to ~/vpn            ║
-║   htbip        show HTB IP                                   ║
+║   vpnip        show HTB IP                                   ║
 ╠══════════════════════════════════════════════════════════════╣
 ║ HOSTS & TARGET                                               ║
 ║   settargetip  <ip> - set target IP                          ║
+║   toggletargetip hide/show target IP in prompt               ║
 ║   targetip     show target IP                                ║
 ║   addhost      [ip] <domain> - add to /etc/hosts             ║
 ║   restorehosts reset /etc/hosts                              ║

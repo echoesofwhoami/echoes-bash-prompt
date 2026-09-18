@@ -96,12 +96,10 @@ set_prompt() {
 
     initial_box_with "${user}@${host}"
 
-    if [[ -n $(htbip) ]]; then
-            new_box_with "htbip $(htbip)"
-        if [[ -s "$HOME/.targetip" ]]; then
-            new_box_with "targetip $(targetip)"
-        else
-            new_box_with "<targetip not set>"
+    if [[ -n $(vpnip) ]]; then
+            new_box_with "tun0: $(vpnip)"
+        if [[ -z "$hidetargetip" && -s "$HOME/.targetip" ]]; then
+            new_box_with "targetip: $(targetip)"
         fi
     fi
 

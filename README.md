@@ -2,7 +2,7 @@
 
 Contains a install.sh script that can be executed to install everything needed.
 
-It contains some useful aliases for htb machines like: connectvpn, stopvpn, htbip, addhost (to /etc/hosts) etc.
+It contains some useful aliases for htb machines like: connectvpn, stopvpn, vpnip, addhost (to /etc/hosts) etc.
 
 Now it also shows the vpn ip when connected to a htb vpn.
 
@@ -39,10 +39,11 @@ The aliases handle everything else automatically - no need to manually manage VP
 ║   stopvpn      stop VPN connection                           ║
 ║   vpns         list VPN files                                ║
 ║   vpnfilemv    move .ovpn from Downloads to ~/vpn            ║
-║   htbip        show HTB IP                                   ║
+║   vpnip        show Tun0 IP                                   ║
 ╠══════════════════════════════════════════════════════════════╣
 ║ HOSTS & TARGET                                               ║
 ║   settargetip  <ip> - set target IP                          ║
+║   toggletargetip hide/show target IP in prompt               ║
 ║   targetip     show target IP                                ║
 ║   addhost      [ip] <domain> - add to /etc/hosts             ║
 ║   restorehosts reset /etc/hosts                              ║

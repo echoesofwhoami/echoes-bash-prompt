@@ -1,7 +1,7 @@
 #!/bin/bash
 
 _payload_get_ip() {
-    local ip="${1:-$(htbip 2>/dev/null)}"
+    local ip="${1:-$(vpnip 2>/dev/null)}"
     [[ -z "$ip" ]] && ip="YOUR_IP"
     echo "$ip"
 }
@@ -397,7 +397,7 @@ XSS Options:
   --all        Print all XSS tags at once
   --cookies    Modify payloads to steal cookies (works with: img, img-onerror, script-fetch, svg, body, input, csp-form, bypass-*)
   --port       Port (default: 4444)
-  --ip         IP address (default: htbip)
+  --ip         IP address (default: vpnip)
   --path       Path (default: xss_poc)
   --listen     Start nc listener on port
   
@@ -406,7 +406,7 @@ XSS Options:
 RCE Options:
   --tag        Shell type: bash, bash-b64, nc, nc-mkfifo, python, php, perl, powershell
   --port       Port (default: 4444)
-  --ip         IP address (default: htbip)
+  --ip         IP address (default: vpnip)
   --listen     Start nc listener on port
 
 LFI Options:
@@ -421,7 +421,7 @@ SSTI Options:
 
 XXE Options:
   --port       Port (default: 4444)
-  --ip         IP address (default: htbip)
+  --ip         IP address (default: vpnip)
   --listen     Start nc listener on port
 
 Examples:
