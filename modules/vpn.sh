@@ -9,7 +9,9 @@ vpnfilemv() {
 
 vpns() { ls -lah "$VPN_DIR"; }
 
-vpnip() { ip a | grep -oP '10\.\d+\.\d+\.\d+' | head -n1; }
+vpnip() {
+    ip -o -4 addr show 2>/dev/null | awk '$2 == "tun0" { split($4, a, "/"); print a[1]; exit }'
+}
 
 connvpn() {
     sudo -l >/dev/null
